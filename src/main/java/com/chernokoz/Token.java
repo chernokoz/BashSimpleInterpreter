@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 
 public interface Token {
-    public List<String> reservedWords = Arrays.asList("cat", "echo", "wc", "pwd", "exit");
-    public List<Character> specialSymbols = Arrays.asList('$', '\'', '\"', '|', '=');
+
+    public String getToken();
+
+    List<String> reservedWords = Arrays.asList("cat", "echo", "wc", "pwd", "exit");
+    List<Character> specialSymbols = Arrays.asList('$', '\'', '\"', '|', '=');
 }

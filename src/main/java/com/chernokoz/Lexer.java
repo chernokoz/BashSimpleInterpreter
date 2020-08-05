@@ -19,25 +19,48 @@ public class Lexer {
         for (char symbol : string.toCharArray()) {
             if (Token.specialSymbols.contains(symbol)) {
                 if (currentWord.length() > 0) {
-                    tokenList.add(new ReservedWordToken(currentWord));
+                    tokenList.add(finishCurrentWord(currentWord));
+                    currentWord = "";
                 }
                 tokenList.add(new SpecialSymbolToken(symbol));
                 continue;
             }
-            currentWord += symbol;
             if (symbol == ' ') {
                 if (Token.reservedWords.contains(currentWord)) {
                     tokenList.add(new ReservedWordToken(currentWord));
+                    currentWord = "";
                 } else {
-                    if (currentWord.length() > 0) {
+                    if (currentWord.length() > 0 && !WhiteSpaceToken.checkForWhiteSpace(currentWord)) {
                         tokenList.add(new WordToken(currentWord));
+                        currentWord = "";
                     }
                 }
             }
+            else {
+                if (WhiteSpaceToken.checkForWhiteSpace(currentWord)) {
+                    tokenList.add(new WhiteSpaceToken(currentWord));
+                    currentWord = "";
+                }
+            }
+            currentWord += symbol;
         }
-
-
-
+        if (currentWord.length() > 0 && !WhiteSpaceToken.checkForWhiteSpace(currentWord)) {
+            if (ReservedWordToken.reservedWords.contains(currentWord)) {
+                tokenList.add(new ReservedWordToken(currentWord));
+            }
+            tokenList.add(new WordToken(currentWord));
+        }
         return tokenList;
     }
+
+    private Token finishCurrentWord(String currentWord) {
+        if (WhiteSpaceToken.checkForWhiteSpace(currentWord)) {
+            return new WhiteSpaceToken(currentWord);
+        }
+        if (ReservedWordToken.reservedWords.contains(currentWord)) {
+            return new ReservedWordToken(currentWord);
+        }
+        return new WordToken(currentWord);
+    }
+
 }

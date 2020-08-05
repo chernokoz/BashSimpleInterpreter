@@ -5,14 +5,14 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
         System.out.println("Welcome to shell!...");
         Environment env = new Environment();
         System.out.print("Current directory is: ");
         System.out.println(env.getCurrentDirectory());
 
-
-
         while (true) {
+
             Scanner in = new Scanner(System.in);
             System.out.print("[ Shell != Neste ] -> ");
             String str = in.nextLine();
@@ -24,6 +24,7 @@ public class Main {
                 System.out.println("Closing shell...");
                 break;
             }
+
         }
     }
 }
