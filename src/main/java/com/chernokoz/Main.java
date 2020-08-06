@@ -1,10 +1,11 @@
 package com.chernokoz;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("Welcome to shell!...");
         Environment env = new Environment();
@@ -19,6 +20,14 @@ public class Main {
             System.out.println("You entered string " + str);
 
             Lexer lexer = new Lexer(str);
+
+            Parser parser = new Parser(lexer.run());
+
+            for (ArrayList<Command> commandSequence : parser.run()) {
+                for (Command command : commandSequence) {
+                    command.execute();
+                }
+            }
 
             if (str.equals("exit")) {
                 System.out.println("Closing shell...");
