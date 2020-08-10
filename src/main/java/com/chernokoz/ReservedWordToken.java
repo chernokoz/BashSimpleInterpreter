@@ -2,7 +2,7 @@ package com.chernokoz;
 
 public class ReservedWordToken implements Token {
 
-    private String reservedWord;
+    private final String reservedWord;
 
     public String getToken() {
         return reservedWord;

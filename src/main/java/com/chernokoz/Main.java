@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         System.out.println("Welcome to shell!...");
         Environment env = new Environment();
@@ -19,21 +19,46 @@ public class Main {
             String str = in.nextLine();
             System.out.println("You entered string " + str);
 
+            try {
+                runLine(str);
+            } catch (ExitException e) {
+                break;
+            } catch (CommandNotFoundException e) {
+                System.out.println("Command not found!");
+            }
+
+    }
+    }
+
+    protected static void runLine(String str) throws ExitException, CommandNotFoundException {
             Lexer lexer = new Lexer(str);
 
             Parser parser = new Parser(lexer.run());
 
-            for (ArrayList<Command> commandSequence : parser.run()) {
+            ArrayList<ArrayList<Command>> commands = parser.run();
+            Command prev = null;
+            String commandSequenceOut = null;
+            Command lastCommand = null;
+
+            for (ArrayList<Command> commandSequence : commands) {
+
                 for (Command command : commandSequence) {
+                    if (prev != null) {
+                        command.putIn(prev.out);
+                    }
                     command.execute();
+                    prev = command;
+
+                    if (command.equals(commandSequence.get(commandSequence.size() - 1))) {
+                        commandSequenceOut = command.out;
+                        lastCommand = command;
+                    }
                 }
-            }
 
-            if (str.equals("exit")) {
-                System.out.println("Closing shell...");
-                break;
+                if (!commandSequence.equals(commands.get(0)) && commandSequenceOut != null) {
+                    System.out.print("\n");
+                }
+                if (commandSequenceOut != null) System.out.print(commandSequenceOut);
             }
-
         }
     }
-}
