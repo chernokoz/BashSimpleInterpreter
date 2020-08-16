@@ -1,5 +1,6 @@
 package com.chernokoz;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,20 +21,22 @@ public class Main {
             System.out.println("You entered string " + str);
 
             try {
-                runLine(str);
+                runLine(str, env);
             } catch (ExitException e) {
                 break;
             } catch (CommandNotFoundException e) {
                 System.out.println("Command not found!");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-    }
+        }
     }
 
-    protected static void runLine(String str) throws ExitException, CommandNotFoundException {
+    protected static void runLine(String str, Environment env) throws ExitException, CommandNotFoundException, IOException {
             Lexer lexer = new Lexer(str);
 
-            Parser parser = new Parser(lexer.run());
+            Parser parser = new Parser(lexer.run(), env);
 
             ArrayList<ArrayList<Command>> commands = parser.run();
             Command prev = null;

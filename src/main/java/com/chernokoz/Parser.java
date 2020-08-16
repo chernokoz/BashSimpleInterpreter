@@ -6,8 +6,11 @@ public class Parser {
 
     ArrayList<Token> tokenList;
 
-    public Parser(ArrayList<Token> tokenList) {
+    private final Environment env;
+
+    public Parser(ArrayList<Token> tokenList, Environment env) {
         this.tokenList = tokenList;
+        this.env = env;
     }
 
     public ArrayList<ArrayList<Command>> run() throws CommandNotFoundException {
@@ -34,14 +37,14 @@ public class Parser {
             }
 
             if (token.getToken().equals("|")) {
-                currentSequence.add(Command.createCommandInstance(currentCommand, args, false));
+                currentSequence.add(Command.createCommandInstance(currentCommand, args, false, env));
                 args = new ArrayList<>();
                 currentCommand = null;
                 continue;
             }
 
             if (token.getToken().equals(";")) {
-                currentSequence.add(Command.createCommandInstance(currentCommand, args, true));
+                currentSequence.add(Command.createCommandInstance(currentCommand, args, true, env));
                 result.add(currentSequence);
                 args = new ArrayList<>();
                 currentCommand = null;
@@ -52,7 +55,7 @@ public class Parser {
             args.add(token.getToken());
         }
 
-        currentSequence.add(Command.createCommandInstance(currentCommand, args, true));
+        currentSequence.add(Command.createCommandInstance(currentCommand, args, true, env));
 
         result.add(currentSequence);
 

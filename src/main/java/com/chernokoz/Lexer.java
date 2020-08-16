@@ -47,8 +47,9 @@ public class Lexer {
         if (currentWord.length() > 0 && !WhiteSpaceToken.checkForWhiteSpace(currentWord)) {
             if (ReservedWordToken.reservedWords.contains(currentWord)) {
                 tokenList.add(new ReservedWordToken(currentWord));
+            } else {
+                tokenList.add(new WordToken(currentWord));
             }
-            tokenList.add(new WordToken(currentWord));
         }
         return tokenList;
     }
