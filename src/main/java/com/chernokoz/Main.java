@@ -42,8 +42,11 @@ public class Main {
             Command prev = null;
             String commandSequenceOut = null;
             Command lastCommand = null;
+            boolean needNewLine = false;
 
             for (ArrayList<Command> commandSequence : commands) {
+
+                commandSequenceOut = null;
 
                 for (Command command : commandSequence) {
                     if (prev != null) {
@@ -58,10 +61,15 @@ public class Main {
                     }
                 }
 
-                if (!commandSequence.equals(commands.get(0)) && commandSequenceOut != null) {
+                if (!commandSequence.equals(commands.get(0)) && commandSequenceOut != null && needNewLine) {
                     System.out.print("\n");
+                    needNewLine = false;
                 }
-                if (commandSequenceOut != null) System.out.print(commandSequenceOut);
+
+                if (commandSequenceOut != null) {
+                    System.out.print(commandSequenceOut);
+                    needNewLine = true;
+                }
             }
         }
     }
