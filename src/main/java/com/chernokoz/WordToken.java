@@ -1,8 +1,11 @@
 package com.chernokoz;
 
+/**
+ * class for basic word token
+ */
 public class WordToken implements Token {
 
-    private String word;
+    private final String word;
 
     public String getToken() {
         return word;

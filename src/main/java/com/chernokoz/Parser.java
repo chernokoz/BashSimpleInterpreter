@@ -2,10 +2,19 @@ package com.chernokoz;
 
 import java.util.ArrayList;
 
+/**
+ * class needed for parse token list and create command sequences
+ */
 public class Parser {
 
+    /**
+     * tokenList from lexer
+     */
     ArrayList<Token> tokenList;
 
+    /**
+     * environment of command interpreter
+     */
     private final Environment env;
 
     public Parser(ArrayList<Token> tokenList, Environment env) {
@@ -13,6 +22,11 @@ public class Parser {
         this.env = env;
     }
 
+    /**
+     * method for parse one command sequence, ended with ";"
+     * @param sequenceTokenList token list of this sequence
+     * @return list of command if this sequence, divided with "|"
+     */
     public ArrayList<Command> parseSequence(ArrayList<Token> sequenceTokenList) {
         ArrayList<Command> result = new ArrayList<>();
         String currentCommand = null;
@@ -145,6 +159,13 @@ public class Parser {
         return result;
     }
 
+    /**
+     * method for parse command for commands sequences, divided by ";",
+     * parse them one by one my parseSequence method and get list of
+     * lists of commands, divided with "|", where lists of commands
+     * are divided with ";"
+     * @return list of lists of commands
+     */
     public ArrayList<ArrayList<Command>> run() {
         ArrayList<ArrayList<Command>> result = new ArrayList<>();
         ArrayList<Token> currentSequenceTokens = new ArrayList<>();

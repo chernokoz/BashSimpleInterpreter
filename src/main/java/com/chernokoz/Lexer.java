@@ -2,13 +2,24 @@ package com.chernokoz;
 
 import java.util.ArrayList;
 
+/**
+ * class for make lexical analyse of command and get tokens
+ */
 public class Lexer {
+
+    /**
+     * command line
+     */
     private final String string;
 
     public Lexer(String text) {
         this.string = text;
     }
 
+    /**
+     * run Lexer
+     * @return Tokens, creating this line
+     */
     public ArrayList<Token> run() {
         ArrayList<Token> tokenList = new ArrayList<>();
         String currentWord = "";
@@ -53,6 +64,11 @@ public class Lexer {
         return tokenList;
     }
 
+    /**
+     * factory method to create Token instance
+     * @param currentWord current word
+     * @return Token equals to this word
+     */
     private Token finishCurrentWord(String currentWord) {
 
         if (WhiteSpaceToken.checkForWhiteSpace(currentWord)) {

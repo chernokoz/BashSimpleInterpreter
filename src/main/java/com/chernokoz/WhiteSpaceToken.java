@@ -1,5 +1,8 @@
 package com.chernokoz;
 
+/**
+ * class for white space token
+ */
 public class WhiteSpaceToken implements Token {
 
     int size;

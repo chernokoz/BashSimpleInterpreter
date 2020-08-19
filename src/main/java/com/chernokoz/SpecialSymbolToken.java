@@ -1,5 +1,8 @@
 package com.chernokoz;
 
+/**
+ * class for special symbol token
+ */
 public class SpecialSymbolToken implements Token {
 
     Character symbol;

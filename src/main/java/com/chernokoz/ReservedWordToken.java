@@ -1,5 +1,8 @@
 package com.chernokoz;
 
+/**
+ * class for reserved word token
+ */
 public class ReservedWordToken implements Token {
 
     private final String reservedWord;
