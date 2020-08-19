@@ -12,7 +12,8 @@ This project is simple bash command line interpreter.
 * wc
 * pwd
 * exit
-Also, interpreter support pipes and ";"
+* also, interpreter support pipes and ";"
+* and global variables
 
 ## Examples
 ```
