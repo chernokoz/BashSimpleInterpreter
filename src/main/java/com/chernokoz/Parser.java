@@ -115,10 +115,23 @@ public class Parser {
         }
 
         sequenceTokenList = unquotedSequenceTokenList;
+        boolean isOutsideCommand = false;
+        StringBuilder outsideCommand = new StringBuilder();
 
         for (int i = 0; i < sequenceTokenList.size(); i++) {
+
             token = sequenceTokenList.get(i);
             tokenValue = token.getToken();
+
+            if (isOutsideCommand) {
+                if (tokenValue.equals("|")) {
+                    result.add(new OutsideCommand(outsideCommand.toString(), env));
+                    isOutsideCommand = false;
+                } else {
+                    outsideCommand.append(tokenValue);
+                }
+                continue;
+            }
 
             if (tokenValue.equals("\"") && !singleQuoteFlag) {
                 doubleQuoteFlag = !doubleQuoteFlag;
@@ -138,6 +151,10 @@ public class Parser {
                 } else if (token instanceof ReservedWordToken) {
                     currentCommand = token.getToken();
                     continue;
+                } else {
+                    outsideCommand.append(tokenValue);
+                    isOutsideCommand = true;
+                    continue;
                 }
             }
 
@@ -149,11 +166,14 @@ public class Parser {
             }
 
             args.add(token.getToken());
-
         }
 
         if (currentCommand != null) {
             result.add(Command.createCommandInstance(currentCommand, args, true, env));
+        }
+
+        if (isOutsideCommand) {
+            result.add(new OutsideCommand(outsideCommand.toString(), env));
         }
 
         return result;

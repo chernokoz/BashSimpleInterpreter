@@ -97,4 +97,9 @@ public class MainTest extends Main {
         assertEquals("$a", testFunc("echo '$a'"));
         assertEquals("222 222 111 111", testFunc("echo '222 222' '111 111'"));
     }
+
+    @Test
+    public void outsideCommand() throws ExitException, CommandNotFoundException {
+        assertEquals("235", testFunc("echo 7 | printf 235"));
+    }
 }
