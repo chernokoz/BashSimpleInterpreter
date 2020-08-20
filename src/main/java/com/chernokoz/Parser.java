@@ -181,7 +181,7 @@ public class Parser {
 
     /**
      * method for parse command for commands sequences, divided by ";",
-     * parse them one by one my parseSequence method and get list of
+     * parse them one by one with parseSequence method and get list of
      * lists of commands, divided with "|", where lists of commands
      * are divided with ";"
      * @return list of lists of commands

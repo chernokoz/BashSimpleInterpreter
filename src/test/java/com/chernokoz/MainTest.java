@@ -6,7 +6,7 @@ import java.io.*;
 
 import static org.junit.Assert.*;
 
-public class MainTest extends Main {
+public class MainTest {
 
     private String testFunc(String str) throws ExitException, CommandNotFoundException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -77,7 +77,7 @@ public class MainTest extends Main {
         assertEquals("5", testFunc("a=5; echo $a"));
         assertEquals("3\n1", testFunc("a=5; a=3; echo $a; a=1; echo $a"));
         assertEquals("", testFunc("echo $a"));
-        assertEquals("", testFunc("a=1 | echo $a; a=2 | echo $a"));
+        assertEquals("\n", testFunc("a=1 | echo $a; a=2 | echo $a"));
         assertEquals("5", testFunc("a=b; $a=5; echo $b"));
         assertEquals("", testFunc("a= ; echo $a"));
     }
