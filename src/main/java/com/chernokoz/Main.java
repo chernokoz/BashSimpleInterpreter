@@ -28,12 +28,14 @@ public class Main {
                 System.out.println("Command not found!");
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
     }
 
-    protected static void runLine(String str, Environment env) throws ExitException, CommandNotFoundException, IOException {
+    protected static void runLine(String str, Environment env) throws ExitException, CommandNotFoundException, IOException, Exception {
             Lexer lexer = new Lexer(str);
 
             Parser parser = new Parser(lexer.run(), env);

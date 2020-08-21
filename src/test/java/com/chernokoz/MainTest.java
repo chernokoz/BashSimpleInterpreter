@@ -102,4 +102,25 @@ public class MainTest {
     public void outsideCommand() throws ExitException, CommandNotFoundException {
         assertEquals("235", testFunc("echo 7 | printf 235"));
     }
+
+    @Test
+    public void grep() throws ExitException, CommandNotFoundException {
+        assertEquals("100", testFunc("echo \"100\n300\n500\" | grep -A 0 100"));
+        assertEquals("100\n300\n500", testFunc("echo \"100\n300\n500\" | grep -A 0 00"));
+        assertEquals("300", testFunc("echo \"100\n300\n500\" | grep -A 0 300"));
+        assertEquals("", testFunc("echo \"100\n300\n500\" | grep -A 0 400"));
+        assertEquals("100\n300", testFunc("echo \"100\n300\n500\" | grep -A 1 100"));
+        assertEquals("100\n300\n500", testFunc("echo \"100\n300\n500\" | grep -A 2 100"));
+        assertEquals("100\n300\n500", testFunc("echo \"100\n300\n500\" | grep -A 22 100"));
+
+        assertEquals("", testFunc("echo \"abcDef\" | grep abcdef"));
+        assertEquals("abcDef", testFunc("echo \"abcDef\" | grep -i abcdef"));
+
+        assertEquals("abc def", testFunc("echo \"abc def\nabcdef\" | grep -w abc"));
+        assertEquals("abc def", testFunc("echo \"abc def\nabcdef\" | grep -w \"abc\""));
+        assertEquals("", testFunc("echo \"abc def\nabcdef\" | grep -w \"abc$\""));
+        assertEquals("abc def", testFunc("echo \"abc def\nabcdef\" | grep -w \"^abc\""));
+        assertEquals("", testFunc("echo \"abc def\nabcdef\" | grep -w \"^abc$\""));
+        assertEquals("abc def", testFunc("echo \"abc def\nabcdef\" | grep -w \"def\""));
+    }
 }

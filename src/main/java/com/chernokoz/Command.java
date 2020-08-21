@@ -37,7 +37,7 @@ public abstract class Command {
      * @throws ExitException for send a exit command to main
      * @throws IOException for file IO
      */
-    public abstract void execute() throws ExitException, IOException;
+    public abstract void execute() throws Exception;
 
     /**
      * factory method to create command instance
@@ -55,6 +55,7 @@ public abstract class Command {
             case "cat" -> new CommandCat(args,env);
             case "exit" -> new CommandExit(args, isLastFlag);
             case "wc" -> new CommandWc(args, env);
+            case "grep" -> new CommandGrep(args);
             default -> null;
         };
     }
