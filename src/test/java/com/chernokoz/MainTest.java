@@ -62,7 +62,7 @@ public class MainTest {
     public void exit() throws ExitException, CommandNotFoundException {
         assertEquals("15", testFunc("echo 5 | echo 10 | exit | echo 15"));
         assertEquals("5\n10", testFunc("echo 5 ; echo 10; exit; echo 15"));
-        assertEquals("exit: too many arguments\n", testFunc("echo 123 | exit 123 456"));
+        assertEquals("exit: too many arguments" + System.lineSeparator(), testFunc("echo 123 | exit 123 456"));
     }
 
     @Test
@@ -101,5 +101,6 @@ public class MainTest {
     @Test
     public void outsideCommand() throws ExitException, CommandNotFoundException {
         assertEquals("235", testFunc("echo 7 | printf 235"));
+
     }
 }
