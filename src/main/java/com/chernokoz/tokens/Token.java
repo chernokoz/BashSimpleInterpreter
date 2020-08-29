@@ -1,4 +1,4 @@
-package com.chernokoz;
+package com.chernokoz.tokens;
 
 import java.util.*;
 

@@ -1,7 +1,11 @@
-package com.chernokoz;
+package com.chernokoz.commands;
+
+import com.chernokoz.*;
+import com.chernokoz.exceptions.ExitException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract class for commands
@@ -12,17 +16,21 @@ public abstract class Command {
     /**
      * command input
      */
-    String in = null;
+    private String in = null;
 
     /**
      * command output
      */
-    String out = null;
+    private String out = null;
 
     /**
      * command arguments
      */
-    ArrayList<String> arguments = null;
+     private List<String> arguments = null;
+
+     public Command(ArrayList<String> arguments) {
+         this.arguments = arguments;
+     }
 
     /**
      * put output of previous command to input of this command
@@ -30,6 +38,21 @@ public abstract class Command {
      */
     public void putIn(String in) {
         this.in = in;
+    }
+
+    public String getIn() {
+        return in;
+    }
+    public String getOut() {
+        return out;
+    }
+
+    public void putOut(String in) {
+        this.out = in;
+    }
+
+    public List<String> getArgs() {
+        return arguments;
     }
 
     /**

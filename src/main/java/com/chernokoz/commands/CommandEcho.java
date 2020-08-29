@@ -1,16 +1,15 @@
-package com.chernokoz;
+package com.chernokoz.commands;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class CommandEcho extends Command {
 
     public CommandEcho(ArrayList<String> args) {
-        this.arguments = args;
+        super(args);
     }
 
     @Override
     public void execute() {
-        out = String.join(" ", arguments);
+        putOut(String.join(" ", getArgs()));
     }
 }

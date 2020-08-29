@@ -1,5 +1,7 @@
 package com.chernokoz;
 
+import com.chernokoz.exceptions.CommandNotFoundException;
+import com.chernokoz.exceptions.ExitException;
 import org.junit.Test;
 
 import java.io.*;

@@ -1,8 +1,8 @@
-package com.chernokoz;
+package com.chernokoz.commands;
 
-import java.io.BufferedReader;
+import com.chernokoz.Environment;
+
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,12 +14,13 @@ public class CommandCat extends Command {
     private final Environment env;
 
     public CommandCat(ArrayList<String> args, Environment env) {
-        arguments = args;
+        super(args);
         this.env = env;
     }
 
     @Override
     public void execute() throws IOException {
+        final var arguments = getArgs();
         if (arguments.size() > 0) {
             StringJoiner res = new StringJoiner("\n");
             for (String arg : arguments) {
@@ -30,9 +31,9 @@ public class CommandCat extends Command {
                     System.out.println("error: file not found");
                 }
             }
-            out = res.toString();
+            putOut(res.toString());
         } else {
-            out = in;
+            putOut(getIn());
         }
     }
 }

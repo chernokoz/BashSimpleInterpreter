@@ -1,4 +1,4 @@
-package com.chernokoz;
+package com.chernokoz.tokens;
 
 /**
  * class for special symbol token

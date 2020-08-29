@@ -1,9 +1,12 @@
-package com.chernokoz;
+package com.chernokoz.commands;
+
+import com.chernokoz.Environment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class CommandWc extends Command {
@@ -11,7 +14,7 @@ public class CommandWc extends Command {
     private final Environment env;
 
     public CommandWc(ArrayList<String> args, Environment env) {
-        arguments = args;
+        super(args);
         this.env = env;
     }
 
@@ -24,6 +27,7 @@ public class CommandWc extends Command {
 
     @Override
     public void execute() {
+        List<String> arguments = getArgs();
         if (arguments.size() > 0) {
             StringJoiner joiner = new StringJoiner("\n");
             for (String arg : arguments) {
@@ -34,9 +38,9 @@ public class CommandWc extends Command {
                     System.out.println("wc: " + arg + ": No such file or directory");
                 }
             }
-            out = joiner.toString();
+            putOut(joiner.toString());
         } else {
-            out = wcHelper(in, null);
+            putOut(wcHelper(getIn(), null));
         }
     }
 }

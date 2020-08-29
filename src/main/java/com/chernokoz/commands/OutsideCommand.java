@@ -1,8 +1,9 @@
-package com.chernokoz;
+package com.chernokoz.commands;
+
+import com.chernokoz.Environment;
 
 import java.io.*;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 public class OutsideCommand extends Command {
 
@@ -10,6 +11,7 @@ public class OutsideCommand extends Command {
     String commandString;
 
     public OutsideCommand(String commandString, Environment env) {
+        super(null);
         this.commandString = commandString;
         environment = env;
     }
@@ -29,6 +31,6 @@ public class OutsideCommand extends Command {
             result.add(line);
         }
 
-        out = result.toString();
+        putOut(result.toString());
     }
 }

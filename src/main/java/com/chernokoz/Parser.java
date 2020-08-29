@@ -1,5 +1,11 @@
 package com.chernokoz;
 
+import com.chernokoz.commands.Command;
+import com.chernokoz.commands.OutsideCommand;
+import com.chernokoz.tokens.ReservedWordToken;
+import com.chernokoz.tokens.Token;
+import com.chernokoz.tokens.WhiteSpaceToken;
+
 import java.util.ArrayList;
 
 /**
@@ -53,7 +59,7 @@ public class Parser {
                     && !singleQuoteFlag
                     && i < sequenceTokenList.size() - 1
                     && !(sequenceTokenList.get(i + 1) instanceof WhiteSpaceToken)) {
-                Token identifier = sequenceTokenList.get(i+1);
+                Token identifier = sequenceTokenList.get(i + 1);
                 sequenceTokenList.remove(i);
                 sequenceTokenList.remove(i);
                 if (env.isVar(identifier.getToken())) {

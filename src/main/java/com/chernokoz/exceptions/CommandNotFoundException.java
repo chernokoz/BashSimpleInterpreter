@@ -1,4 +1,4 @@
-package com.chernokoz;
+package com.chernokoz.exceptions;
 
 public class CommandNotFoundException extends Exception {
 
