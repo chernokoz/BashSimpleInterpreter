@@ -105,4 +105,9 @@ public class MainTest {
         assertEquals("235", testFunc("echo 7 | printf 235"));
 
     }
+
+    @Test
+    public void dollarsSuperCase() throws ExitException, CommandNotFoundException {
+        assertEquals("", testFunc("a=ex; b=it; $a$b"));
+    }
 }

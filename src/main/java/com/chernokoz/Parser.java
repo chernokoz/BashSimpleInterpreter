@@ -5,6 +5,7 @@ import com.chernokoz.commands.OutsideCommand;
 import com.chernokoz.tokens.ReservedWordToken;
 import com.chernokoz.tokens.Token;
 import com.chernokoz.tokens.WhiteSpaceToken;
+import com.chernokoz.tokens.WordToken;
 
 import java.util.ArrayList;
 
@@ -70,6 +71,28 @@ public class Parser {
                 }
             }
         }
+
+        Token current;
+        Token next;
+        String twoWords;
+
+        for (int i = 0; i < sequenceTokenList.size() - 1; i++) {
+            current = sequenceTokenList.get(i);
+            next = sequenceTokenList.get(i + 1);
+            if ((current instanceof WordToken || current instanceof ReservedWordToken)
+            && (next instanceof WordToken || next instanceof ReservedWordToken)) {
+                twoWords = current.getToken() + next.getToken();
+                sequenceTokenList.remove(i);
+                sequenceTokenList.remove(i);
+                if (Token.reservedWords.contains(twoWords)) {
+                    sequenceTokenList.add(i, new ReservedWordToken(twoWords));
+                } else {
+                    sequenceTokenList.add(i, new WordToken(twoWords));
+                }
+                i--;
+            }
+        }
+
 
         ArrayList<Token> unquotedSequenceTokenList = new ArrayList<>();
         StringBuilder currentWord = new StringBuilder();
@@ -154,7 +177,7 @@ public class Parser {
                     env.putVar(token.getToken(), value);
                     i += 2;
                     continue;
-                } else if (token instanceof ReservedWordToken) {
+                } else if (token instanceof ReservedWordToken ) {
                     currentCommand = token.getToken();
                     continue;
                 } else {
