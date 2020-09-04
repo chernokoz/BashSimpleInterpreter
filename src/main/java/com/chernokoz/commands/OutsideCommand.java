@@ -18,10 +18,20 @@ public class OutsideCommand extends Command {
 
     @Override
     public void execute() throws IOException {
-        StringJoiner result = new StringJoiner("\n");
+        StringJoiner result = new StringJoiner(System.lineSeparator());
+
+        boolean isWindows = System.getProperty("os.name")
+                .toLowerCase().startsWith("windows");
+
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("/bin/bash", "-c", commandString);
+        if (isWindows) {
+            builder.command("cmd.exe", "/c", commandString);
+        } else {
+            builder.command("sh", "-c", commandString);
+        }
+        builder.directory(new File(environment.getCurrentDirectory()));
         Process process = builder.start();
+
         InputStream is = process.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);

@@ -1,5 +1,6 @@
 package com.chernokoz;
 
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -15,7 +16,7 @@ public class Environment {
     /**
      * current directory value
      */
-    private final String currentDirectory = "";
+    private final String currentDirectory = new File("").getAbsolutePath();
 
     /**
      * getter for currentDirectory

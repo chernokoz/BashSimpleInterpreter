@@ -2,6 +2,7 @@ package com.chernokoz;
 
 import com.chernokoz.commands.Command;
 import com.chernokoz.commands.OutsideCommand;
+import com.chernokoz.exceptions.StopException;
 import com.chernokoz.tokens.ReservedWordToken;
 import com.chernokoz.tokens.Token;
 import com.chernokoz.tokens.WhiteSpaceToken;
@@ -34,7 +35,7 @@ public class Parser {
      * @param sequenceTokenList token list of this sequence
      * @return list of command if this sequence, divided with "|"
      */
-    public ArrayList<Command> parseSequence(ArrayList<Token> sequenceTokenList) {
+    public ArrayList<Command> parseSequence(ArrayList<Token> sequenceTokenList) throws StopException {
         ArrayList<Command> result = new ArrayList<>();
         String currentCommand = null;
         ArrayList<String> args = new ArrayList<>();
@@ -146,6 +147,7 @@ public class Parser {
         sequenceTokenList = unquotedSequenceTokenList;
         boolean isOutsideCommand = false;
         StringBuilder outsideCommand = new StringBuilder();
+        boolean isOnlyWhite = true;
 
         for (int i = 0; i < sequenceTokenList.size(); i++) {
 
@@ -164,6 +166,7 @@ public class Parser {
 
             if (tokenValue.equals("\"") && !singleQuoteFlag) {
                 doubleQuoteFlag = !doubleQuoteFlag;
+                isOnlyWhite = false;
             }
 
             if (token instanceof WhiteSpaceToken) {
@@ -176,13 +179,19 @@ public class Parser {
                     String value =(i + 2 < sequenceTokenList.size()) ? sequenceTokenList.get(i + 2).getToken() : "";
                     env.putVar(token.getToken(), value);
                     i += 2;
+                    isOnlyWhite = false;
                     continue;
                 } else if (token instanceof ReservedWordToken ) {
                     currentCommand = token.getToken();
+                    isOnlyWhite = false;
                     continue;
+                } else if (tokenValue.equals("|") && isOnlyWhite) {
+                    System.out.println("parse error near `|'");
+                    throw new StopException();
                 } else {
                     outsideCommand.append(tokenValue);
                     isOutsideCommand = true;
+                    isOnlyWhite = false;
                     continue;
                 }
             }
@@ -191,6 +200,7 @@ public class Parser {
                 result.add(Command.createCommandInstance(currentCommand, args, false, env));
                 args = new ArrayList<>();
                 currentCommand = null;
+                isOnlyWhite = true;
                 continue;
             }
 
@@ -215,7 +225,7 @@ public class Parser {
      * are divided with ";"
      * @return list of lists of commands
      */
-    public ArrayList<ArrayList<Command>> run() {
+    public ArrayList<ArrayList<Command>> run() throws StopException {
         ArrayList<ArrayList<Command>> result = new ArrayList<>();
         ArrayList<Token> currentSequenceTokens = new ArrayList<>();
 

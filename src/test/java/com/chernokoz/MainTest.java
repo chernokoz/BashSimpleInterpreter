@@ -23,21 +23,25 @@ public class MainTest {
 
     @Test
     public void echo() throws ExitException, CommandNotFoundException {
+        String s = System.lineSeparator();
         assertEquals("5", testFunc("echo 5"));
         assertEquals("10", testFunc("echo 10"));
         assertEquals("10", testFunc("echo 5 | echo 10"));
-        assertEquals("5\n10", testFunc("echo 5  ; echo 10"));
-        assertEquals("10\n30\n50", testFunc("echo 5 | echo 10; echo 15 | echo 25 | echo 30; echo 35 | echo 40 | echo 45 | echo 50"));
+        assertEquals(String.format("5%s10", s), testFunc("echo 5  ; echo 10"));
+        assertEquals(String.format("10%s30%s50", s, s),
+                testFunc("echo 5 | echo 10; echo 15 | echo 25 | echo 30; echo 35 | echo 40 | echo 45 | echo 50"));
     }
 
     @Test
     public void pwd() throws ExitException, CommandNotFoundException {
-        assertEquals("", testFunc("pwd"));
+        assertEquals(new File("").getAbsolutePath(), testFunc("pwd"));
         assertEquals("", testFunc("pwd | echo"));
     }
 
     @Test
     public void cat() throws ExitException, CommandNotFoundException, IOException {
+        String s = System.lineSeparator();
+
         assertEquals("123", testFunc("echo 123 | cat"));
         assertEquals("123", testFunc("echo 123 | cat | cat | cat | cat"));
 
@@ -50,21 +54,23 @@ public class MainTest {
         FileWriter writer1 = new FileWriter(file1.getAbsolutePath(), false);
         FileWriter writer2 = new FileWriter(file2.getAbsolutePath(), false);
 
-        writer1.write("11111\n22222\n33333");
-        writer2.write("444\n555\n666");
+        writer1.write(String.format("11111%s22222%s33333", s, s));
+        writer2.write(String.format("444%s555%s666", s, s));
 
         writer1.flush();
         writer2.flush();
 
-        assertEquals("11111\n22222\n33333", testFunc("cat " + file1.getAbsolutePath()));
-        assertEquals("11111\n22222\n33333\n444\n555\n666", testFunc("cat " + file1.getAbsolutePath() + " " + file2.getAbsolutePath()));
+        assertEquals(String.format("11111%s22222%s33333", s, s), testFunc("cat " + file1.getAbsolutePath()));
+        assertEquals(String.format("11111%s22222%s33333%s444%s555%s666", s, s, s, s, s),
+                testFunc("cat " + file1.getAbsolutePath() + " " + file2.getAbsolutePath()));
     }
 
     @Test
     public void exit() throws ExitException, CommandNotFoundException {
         assertEquals("15", testFunc("echo 5 | echo 10 | exit | echo 15"));
         assertEquals("5\n10", testFunc("echo 5 ; echo 10; exit; echo 15"));
-        assertEquals("exit: too many arguments" + System.lineSeparator(), testFunc("echo 123 | exit 123 456"));
+        assertEquals("exit: too many arguments" + System.lineSeparator(),
+                testFunc("echo 123 | exit 123 456"));
     }
 
     @Test
@@ -76,10 +82,11 @@ public class MainTest {
 
     @Test
     public void dollarAndEquals() throws ExitException, CommandNotFoundException {
+        String s = System.lineSeparator();
         assertEquals("5", testFunc("a=5; echo $a"));
-        assertEquals("3\n1", testFunc("a=5; a=3; echo $a; a=1; echo $a"));
+        assertEquals(String.format("3%s1", s), testFunc("a=5; a=3; echo $a; a=1; echo $a"));
         assertEquals("", testFunc("echo $a"));
-        assertEquals("\n", testFunc("a=1 | echo $a; a=2 | echo $a"));
+        assertEquals(String.format("%s", s), testFunc("a=1 | echo $a; a=2 | echo $a"));
         assertEquals("5", testFunc("a=b; $a=5; echo $b"));
         assertEquals("", testFunc("a= ; echo $a"));
     }

@@ -3,6 +3,7 @@ package com.chernokoz;
 import com.chernokoz.commands.Command;
 import com.chernokoz.exceptions.CommandNotFoundException;
 import com.chernokoz.exceptions.ExitException;
+import com.chernokoz.exceptions.StopException;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -16,40 +17,20 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Welcome to shell!");
         Environment env = new Environment();
-        System.out.print("Current directory is: ");
         System.out.println(env.getCurrentDirectory());
 
         Scanner in = new Scanner(System.in);
 
         String str;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("[ Shell != Neste ] -> ");
 
-        Console console = System.console();
         while (true) {
-
-//            str = reader.readLine();
-//            if ( str == null ) {
-//                continue;
-//            }
-//            try {
-//                str = console.readLine("user: ");
-//            } catch (NullPointerException e) {
-//                continue;
-//            }
-
 
             try {
                 str = in.nextLine();
             } catch (NoSuchElementException e) {
                 continue;
             }
-
-//            System.out.print("[ Shell != Neste ] -> ");
-
-//            System.out.println("You entered string " + str);
 
             try {
                 runLine(str, env);
@@ -71,8 +52,13 @@ public class Main {
 
             Parser parser = new Parser(lexer.run(), env);
 
-            ArrayList<ArrayList<Command>> commands = parser.run();
-            Command prev = null;
+        ArrayList<ArrayList<Command>> commands = null;
+        try {
+            commands = parser.run();
+        } catch (StopException e) {
+            return;
+        }
+        Command prev = null;
             String commandSequenceOut = null;
             Command lastCommand = null;
             boolean needNewLine = false;
@@ -82,6 +68,7 @@ public class Main {
                 commandSequenceOut = null;
 
                 for (Command command : commandSequence) {
+
                     if (prev != null) {
                         command.putIn(prev.getOut());
                     }
