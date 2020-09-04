@@ -1,6 +1,5 @@
 package com.chernokoz;
 
-import com.chernokoz.exceptions.CommandNotFoundException;
 import com.chernokoz.exceptions.ExitException;
 import org.junit.Test;
 
@@ -10,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class MainTest {
 
-    private String testFunc(String str) throws ExitException, CommandNotFoundException {
+    private String testFunc(String str) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
         try {
@@ -22,7 +21,7 @@ public class MainTest {
     }
 
     @Test
-    public void echo() throws ExitException, CommandNotFoundException {
+    public void echo() {
         String s = System.lineSeparator();
         assertEquals("5", testFunc("echo 5"));
         assertEquals("10", testFunc("echo 10"));
@@ -33,13 +32,13 @@ public class MainTest {
     }
 
     @Test
-    public void pwd() throws ExitException, CommandNotFoundException {
+    public void pwd() throws ExitException {
         assertEquals(new File("").getAbsolutePath(), testFunc("pwd"));
         assertEquals("", testFunc("pwd | echo"));
     }
 
     @Test
-    public void cat() throws ExitException, CommandNotFoundException, IOException {
+    public void cat() throws ExitException, IOException {
         String s = System.lineSeparator();
 
         assertEquals("123", testFunc("echo 123 | cat"));
@@ -66,7 +65,7 @@ public class MainTest {
     }
 
     @Test
-    public void exit() throws ExitException, CommandNotFoundException {
+    public void exit() throws ExitException {
         assertEquals("15", testFunc("echo 5 | echo 10 | exit | echo 15"));
         assertEquals("5\n10", testFunc("echo 5 ; echo 10; exit; echo 15"));
         assertEquals("exit: too many arguments" + System.lineSeparator(),
@@ -74,14 +73,14 @@ public class MainTest {
     }
 
     @Test
-    public void wc() throws ExitException, CommandNotFoundException {
+    public void wc() throws ExitException {
         assertEquals("\t1\t1\t2", testFunc("echo 5 | wc"));
         assertEquals("\t1\t1\t7", testFunc("echo 123123 | wc"));
         assertEquals("\t1\t3\t7", testFunc("echo 123123 | wc | wc"));
     }
 
     @Test
-    public void dollarAndEquals() throws ExitException, CommandNotFoundException {
+    public void dollarAndEquals() throws ExitException {
         String s = System.lineSeparator();
         assertEquals("5", testFunc("a=5; echo $a"));
         assertEquals(String.format("3%s1", s), testFunc("a=5; a=3; echo $a; a=1; echo $a"));
@@ -92,7 +91,7 @@ public class MainTest {
     }
 
     @Test
-    public void doubleQuoting() throws ExitException, CommandNotFoundException {
+    public void doubleQuoting() throws ExitException {
         assertEquals("123", testFunc("echo \"123\""));
         assertEquals(" 123 ", testFunc("echo \" 123 \""));
         assertEquals("5 123 5", testFunc("a=5; echo \"$a 123 $a\""));
@@ -101,20 +100,20 @@ public class MainTest {
     }
 
     @Test
-    public void singleQuoting() throws ExitException, CommandNotFoundException {
+    public void singleQuoting() throws ExitException {
         assertEquals("222", testFunc("echo '222'"));
         assertEquals("$a", testFunc("echo '$a'"));
         assertEquals("222 222 111 111", testFunc("echo '222 222' '111 111'"));
     }
 
     @Test
-    public void outsideCommand() throws ExitException, CommandNotFoundException {
+    public void outsideCommand() throws ExitException {
         assertEquals("235", testFunc("echo 7 | printf 235"));
 
     }
 
     @Test
-    public void dollarsSuperCase() throws ExitException, CommandNotFoundException {
+    public void dollarsSuperCase() throws ExitException {
         assertEquals("", testFunc("a=ex; b=it; $a$b"));
     }
 }
