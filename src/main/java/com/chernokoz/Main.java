@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Environment env = new Environment();
         System.out.println(env.getCurrentDirectory());
@@ -50,15 +50,17 @@ public class Main {
 
         Parser parser = new Parser(lexer.run(), env);
 
-        ArrayList<ArrayList<Command>> commands = null;
+        ArrayList<ArrayList<Command>> commands;
         try {
             commands = parser.run();
         } catch (StopException e) {
             return;
         }
         Command prev = null;
-        String commandSequenceOut = null;
+        String commandSequenceOut;
         boolean needNewLine = false;
+
+        String sep = System.lineSeparator();
 
         for (ArrayList<Command> commandSequence : commands) {
 
@@ -78,7 +80,7 @@ public class Main {
             }
 
             if (!commandSequence.equals(commands.get(0)) && commandSequenceOut != null && needNewLine) {
-                System.out.print("\n");
+                System.out.print(sep);
                 needNewLine = false;
             }
 

@@ -22,7 +22,8 @@ public class CommandCat extends Command {
     public void execute() throws IOException {
         final var arguments = getArgs();
         if (arguments.size() > 0) {
-            StringJoiner res = new StringJoiner("\n");
+            String sep = System.lineSeparator();
+            StringJoiner res = new StringJoiner(sep);
             for (String arg : arguments) {
                 try {
                     String contents = new String(Files.readAllBytes(Paths.get(arg)));
