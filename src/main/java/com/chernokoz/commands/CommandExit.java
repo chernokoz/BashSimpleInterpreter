@@ -4,6 +4,9 @@ import com.chernokoz.exceptions.ExitException;
 
 import java.util.ArrayList;
 
+/**
+ * class for command exit
+ */
 public class CommandExit extends Command {
 
     private boolean isLast = false;

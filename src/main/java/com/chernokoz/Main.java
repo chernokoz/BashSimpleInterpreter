@@ -45,6 +45,9 @@ public class Main {
         System.out.print("[ Shell != Neste ] -> ");
     }
 
+    /**
+     * function with logic for run one line
+     */
     protected static void runLine(String str, Environment env) throws ExitException, IOException {
         Lexer lexer = new Lexer(str);
 

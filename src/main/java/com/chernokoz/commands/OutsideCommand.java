@@ -5,6 +5,9 @@ import com.chernokoz.Environment;
 import java.io.*;
 import java.util.StringJoiner;
 
+/**
+ * class for command needs to run outside
+ */
 public class OutsideCommand extends Command {
 
     Environment environment;

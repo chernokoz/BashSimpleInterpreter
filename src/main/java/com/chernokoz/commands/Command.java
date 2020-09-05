@@ -40,13 +40,24 @@ public abstract class Command {
         this.in = in;
     }
 
+    /**
+     * getter for command in
+     */
     public String getIn() {
         return in;
     }
+
+    /**
+     * getter for command out
+     */
     public String getOut() {
         return out;
     }
 
+
+    /**
+     * setter for command out
+     */
     public void putOut(String in) {
         this.out = in;
     }

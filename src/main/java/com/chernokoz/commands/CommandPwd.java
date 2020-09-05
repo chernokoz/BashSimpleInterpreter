@@ -4,6 +4,9 @@ import com.chernokoz.Environment;
 
 import java.util.ArrayList;
 
+/**
+ * class for command pwd
+ */
 public class CommandPwd extends Command {
 
     private final Environment env;

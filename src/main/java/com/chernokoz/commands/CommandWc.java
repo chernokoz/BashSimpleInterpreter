@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
+/**
+ * class for command wc
+ */
 public class CommandWc extends Command {
 
     private final Environment env;
@@ -23,6 +26,9 @@ public class CommandWc extends Command {
         this.env = env;
     }
 
+    /**
+     * func for do wc command logic
+     */
     public String wcHelper(String content, String fileName) {
         int linesCount = content.split(System.lineSeparator(), -1).length;
         int wordsCount = content.trim().split("\\s+", -1).length;

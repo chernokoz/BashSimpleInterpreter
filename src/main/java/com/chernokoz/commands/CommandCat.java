@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
+/**
+ * class for command cat
+ */
 public class CommandCat extends Command {
 
     private final Environment env;
