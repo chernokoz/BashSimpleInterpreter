@@ -110,7 +110,13 @@ public class MainTest {
     @Test
     public void outsideCommand() {
         String s = System.lineSeparator();
-        assertEquals(String.format("rootProject.name = 'bashInterpreter'%s", s), testFunc("type settings.gradle"));
+        boolean isWindows = System.getProperty("os.name")
+                .toLowerCase().startsWith("windows");
+        if (isWindows) {
+            assertEquals(String.format("rootProject.name = 'bashInterpreter'%s", s), testFunc("type settings.gradle"));
+        } else {
+            assertEquals("235", testFunc("echo 5 | printf 235"));
+        }
     }
 
     @Test
