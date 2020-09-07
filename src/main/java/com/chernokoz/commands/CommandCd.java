@@ -42,7 +42,7 @@ public class CommandCd extends Command {
         if (newPath.equals("..")) {
             res = currDir.substring(0, currDir
                     .substring(0, currDir.length() - 1)
-                    .lastIndexOf('/')) + "/";
+                    .lastIndexOf(File.separator)) + "/";
         } else {
             res += newPath;
         }

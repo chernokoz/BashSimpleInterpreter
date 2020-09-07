@@ -27,31 +27,28 @@ public class CdLsTest {
 
     @Before
     public void setUp() {
-        currDir =  System.getProperty("user.dir");
+        currDir =  System.getProperty("user.dir") + "/";
         env = new Environment();
     }
 
-//    @Test
-//    public void pwd() {
-//        System.out.println("~~Current dir:" + currDir);
-//        assertEquals(fixSeparators(currDir + "/"), testFunc("pwd", env));
-//        assertEquals("", testFunc("pwd | echo", env));
-//    }
+    @Test
+    public void pwd() {
+        checkMultiplatform(currDir, "pwd", env);
+    }
 
     @Test
     public void ls() {
-        assertEquals(fixSeparators(currDir + "/src/"),
-                testFunc(fixSeparators("cd src/ | pwd"), env));
+        checkMultiplatform(currDir + "src/", "cd src/ | pwd", env);
+        checkMultiplatform(currDir + "src/test/", "cd test/ | pwd", env);
 
-        assertEquals(fixSeparators(currDir + "/src/test/"), testFunc("cd test/ | pwd", env));
-        String testDir = currDir + "/src/test/resources/testLs";
-        assertEquals(testDir, testFunc("cd resources/testLs | pwd", env));
+        String testDir = currDir + "src/test/resources/testLs";
+        checkMultiplatform(testDir, "cd resources/testLs | pwd", env);
 
         String expected = "somefile.txt\n" +
                 "dir2\n" +
                 "dir3\n" +
                 "dir1\n";
-        assertEquals(expected, testFunc("ls", env));
+        checkMultiplatform(expected, "ls", env);
     }
 
     @Test
@@ -60,48 +57,53 @@ public class CdLsTest {
                 "dir2\n" +
                 "dir3\n" +
                 "dir1\n";
-        assertEquals(expected, testFunc("ls src/test/resources/testLs/", env));
+        checkMultiplatform(expected, "ls src/test/resources/testLs/", env);
     }
 
     @Test
     public void lsOneFile() {
-        assertEquals("file3.txt\n", testFunc("ls src/test/resources/testLs/dir3", env));
+        checkMultiplatform("file3.txt\n","ls src/test/resources/testLs/dir3", env);
     }
 
     @Test
     public void lsNoSuchFile() {
         final String notExistentPath = "ololo/";
         String expected = "ls: " + notExistentPath  + ": No such file or directory\n";
-        assertEquals(expected, testFunc("ls " + notExistentPath, env));
+        checkMultiplatform(expected, "ls " + notExistentPath, env);
     }
 
     @Test
     public void cd() {
-        assertEquals(currDir + "/src/", testFunc("cd src/ | pwd", env));
-        assertEquals(currDir + "/src/test/", testFunc("cd test/ | pwd", env));
-        String testDir = currDir + "/src/test/resources/";
-        assertEquals(testDir, testFunc("cd resources/ | pwd", env));
+        checkMultiplatform(currDir + "src/", "cd src/ | pwd", env);
+        checkMultiplatform(currDir + "src/test/", "cd test/ | pwd", env);
+        String testDir = currDir + "src/test/resources/";
+        checkMultiplatform(testDir,"cd resources/ | pwd", env);
     }
 
     @Test
     public void cdUp() {
-        String testDir = currDir + "/src/test/resources/testLs/";
+        String testDir = currDir + "src/test/resources/testLs/";
         assertEquals(testDir + "dir1/",
                 testFunc("cd " + "src/test/resources/testLs/dir1/" + " | pwd", env));
 
-        assertEquals(testDir, testFunc("cd " + ".." + " | pwd", env));
+        checkMultiplatform(testDir,"cd " + ".." + " | pwd", env);
     }
 
     @Test
     public void cdFile() {
-        assertEquals("-bash: cd: .gitignore: Not a directory\n",
-                testFunc("cd .gitignore", env));
+        checkMultiplatform("-bash: cd: .gitignore: Not a directory\n",
+                "cd .gitignore", env);
     }
 
     @Test
     public void cdNotExistentDirectory() {
-        assertEquals("-bash: cd: kkk: Not a directory\n",
-                testFunc("cd kkk", env));
+        checkMultiplatform("-bash: cd: kkk: Not a directory\n", "cd kkk", env);
+    }
+
+
+    private void checkMultiplatform(String expected, String command, Environment env) {
+        assertEquals(fixSeparators(expected),
+                testFunc(fixSeparators(command), env));
     }
 
     private String fixSeparators(String path) {
