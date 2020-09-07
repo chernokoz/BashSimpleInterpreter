@@ -32,12 +32,6 @@ public class MainTest {
     }
 
     @Test
-    public void pwd() {
-        assertEquals(new File("").getAbsolutePath(), testFunc("pwd"));
-        assertEquals("", testFunc("pwd | echo"));
-    }
-
-    @Test
     public void cat() throws IOException {
         String s = System.lineSeparator();
 
