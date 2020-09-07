@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+task wrapper1(type: Wrapper) {
+    gradleVersion = '6.5.1'
+}
+
 run {
     standardInput = System.in
 }
