@@ -1,14 +1,10 @@
 package com.chernokoz;
 
 import com.chernokoz.commands.Command;
-//import com.chernokoz.exceptions.CommandNotFoundException;
 import com.chernokoz.exceptions.ExitException;
 import com.chernokoz.exceptions.StopException;
 
-import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -17,12 +13,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Environment env = new Environment();
+        var env = new Environment();
         System.out.println(env.getCurrentDirectory());
 
-        Scanner in = new Scanner(System.in);
+        var in = new Scanner(System.in);
 
         String str;
+        boolean result = false;
 
         while (true) {
 
@@ -33,31 +30,32 @@ public class Main {
             }
 
             try {
-                runLine(str, env);
+                result = runLine(str, env);
             } catch (ExitException e) {
                 break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-
+            if (result) System.out.print(System.lineSeparator());
         }
-        System.out.print("[ Shell != Neste ] -> ");
     }
 
     /**
      * function with logic for run one line
      */
-    protected static void runLine(String str, Environment env) throws ExitException, IOException {
-        Lexer lexer = new Lexer(str);
+    protected static boolean runLine(String str, Environment env) throws ExitException, IOException {
+        var lexer = new Lexer(str);
 
-        Parser parser = new Parser(lexer.run(), env);
+        boolean result = false;
+
+        var parser = new Parser(lexer.run(), env);
 
         ArrayList<ArrayList<Command>> commands;
         try {
             commands = parser.run();
         } catch (StopException e) {
-            return;
+            return false;
         }
         Command prev = null;
         String commandSequenceOut;
@@ -87,10 +85,13 @@ public class Main {
                 needNewLine = false;
             }
 
-            if (commandSequenceOut != null) {
+            if (commandSequenceOut != null && !commandSequenceOut.equals("")) {
                 System.out.print(commandSequenceOut);
                 needNewLine = true;
+                result = true;
             }
         }
+
+        return result;
     }
 }

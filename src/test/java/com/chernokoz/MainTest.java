@@ -86,7 +86,7 @@ public class MainTest {
         assertEquals("5", testFunc("a=5; echo $a"));
         assertEquals(String.format("3%s1", s), testFunc("a=5; a=3; echo $a; a=1; echo $a"));
         assertEquals("", testFunc("echo $a"));
-        assertEquals(String.format("%s", s), testFunc("a=1 | echo $a; a=2 | echo $a"));
+        assertEquals("", testFunc("a=1 | echo $a; a=2 | echo $a"));
         assertEquals("5", testFunc("a=b; $a=5; echo $b"));
         assertEquals("", testFunc("a= ; echo $a"));
     }

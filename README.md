@@ -14,7 +14,7 @@ This project is simple bash command line interpreter.
 глобальных переменных.
 
 
-#### Диаграмма классов
+## Class diagram
 ![rogue classes](./src/main/java/com/chernokoz/docs/cliClasses.png)
 
 ## Supported commands
@@ -25,6 +25,12 @@ This project is simple bash command line interpreter.
 * exit
 * also, interpreter support pipes and ";"
 * and global variables
+
+## How to run
+Use this command in the project root directory:
+```
+gradle --console=plain run
+```
 
 ## Examples
 ```
