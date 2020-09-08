@@ -1,6 +1,5 @@
 package com.chernokoz;
 
-import com.chernokoz.exceptions.ExitException;
 import org.junit.Test;
 
 import java.io.*;
@@ -122,5 +121,72 @@ public class MainTest {
     @Test
     public void dollarsSuperCase() {
         assertEquals("", testFunc("a=ex; b=it; $a$b"));
+    }
+
+    @Test
+    public void grep() {
+        String sep = System.lineSeparator();
+        assertEquals(
+                "100",
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 0 100", sep, sep))
+        );
+        assertEquals(
+                String.format("100%s300%s500", sep, sep),
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 0 00", sep, sep))
+        );
+        assertEquals(
+                "300",
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 0 300", sep, sep))
+        );
+        assertEquals(
+                "",
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 0 400", sep, sep))
+        );
+        assertEquals(
+                String.format("100%s300", sep),
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 1 100", sep, sep))
+        );
+        assertEquals(
+                String.format("100%s300%s500", sep, sep),
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 2 100", sep, sep))
+        );
+        assertEquals(
+                String.format("100%s300%s500", sep, sep),
+                testFunc(String.format("echo \"100%s300%s500\" | grep -A 22 100", sep, sep))
+        );
+
+        assertEquals(
+                "",
+                testFunc("echo \"abcDef\" | grep abcdef")
+        );
+        assertEquals(
+                "abcDef",
+                testFunc("echo \"abcDef\" | grep -i abcdef")
+        );
+
+        assertEquals(
+                "abc def",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w abc", sep))
+        );
+        assertEquals(
+                "abc def",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"abc\"", sep))
+        );
+        assertEquals(
+                "",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"abc$\"", sep))
+        );
+        assertEquals(
+                "abc def",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"^abc\"", sep))
+        );
+        assertEquals(
+                "",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"^abc$\"", sep))
+        );
+        assertEquals(
+                "abc def",
+                testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"def\"", sep))
+        );
     }
 }
