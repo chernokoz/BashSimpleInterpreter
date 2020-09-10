@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
  */
 public class CommandGrep extends Command {
 
-    boolean iKey = false;
-    boolean wKey = false;
-    int keyAValue = 0;
+    private boolean iKey = false;
+    private boolean wKey = false;
+    private int keyAValue = 0;
 
     static class Grep {
         @Option(names = "-i", description = "create a new archive")
@@ -49,7 +49,12 @@ public class CommandGrep extends Command {
         Grep parser = new Grep();
         String[] stringArray = arguments.toArray(new String[0]);
 
-        new CommandLine(parser).parseArgs(stringArray);
+        try {
+            new CommandLine(parser).parseArgs(stringArray);
+        } catch (Exception e) {
+            System.out.println("grep: Invalid argument");
+            return;
+        }
 
         iKey = parser.iKey;
         wKey = parser.wKey;
@@ -107,31 +112,37 @@ public class CommandGrep extends Command {
         }
 
         positional.remove(0);
-        int stringsNeedToAdd = 0;
 
         if (positional.isEmpty()) {
 
             String[] lines = getIn().split(System.lineSeparator());
-
-            for (String line : lines) {
-
-                lineToParse = iKey ? line.toLowerCase() : line;
-
-                boolean needToAdd = regexSearch(lineToParse, pattern, wKey);
-
-                if (needToAdd) {
-                    result.add(line);
-                    stringsNeedToAdd = keyAValue;
-                } else if (--stringsNeedToAdd >= 0) {
-                    result.add(line);
-                }
-
-            }
+            result.add(grepHelper(lines, pattern));
 
         } else {
             for (String fileName : positional) {
-                String content = new String(Files.readAllBytes(Paths.get(fileName)));
-                result.add(runGrep(Collections.singletonList(content)));
+                String [] content = new String(Files.readAllBytes(Paths.get(fileName))).split(System.lineSeparator());
+                result.add(grepHelper(content, pattern));
+            }
+        }
+        return result.toString();
+    }
+
+    private String grepHelper(String [] lines, String pattern) {
+        int stringsNeedToAdd = 0;
+        StringJoiner result = new StringJoiner(System.lineSeparator());
+
+        for (String line : lines) {
+
+            String lineToParse;
+            lineToParse = iKey ? line.toLowerCase() : line;
+
+            boolean needToAdd = regexSearch(lineToParse, pattern, wKey);
+
+            if (needToAdd) {
+                result.add(line);
+                stringsNeedToAdd = keyAValue;
+            } else if (--stringsNeedToAdd >= 0) {
+                result.add(line);
             }
         }
         return result.toString();
