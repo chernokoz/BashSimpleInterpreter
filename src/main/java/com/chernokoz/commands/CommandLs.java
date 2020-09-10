@@ -43,7 +43,7 @@ public class CommandLs extends Command {
             path += arg;
         }
 
-        File file = new File(path);
+        var file = new File(path);
 
         if (file.isDirectory()) {
             Arrays.stream(Objects.requireNonNull(file.list()))

@@ -28,8 +28,14 @@ public class CommandCd extends Command {
     public void execute() {
         String currDir = handleMoveUp(env.getCurrentDirectory(), newPath);
 
-        File file = new File(currDir);
+        var file = new File(currDir);
         if (file.exists() && file.isDirectory()) {
+            if (!newPath.endsWith(File.separator) && !newPath.equals("..")) {
+                System.out.println("-bash: cd: error: write "
+                        + newPath + File.separator + " instead");
+                return;
+            }
+
             env.setCurrentDirectory(currDir);
         } else {
             System.out.println("-bash: cd: " + newPath + ": Not a directory");

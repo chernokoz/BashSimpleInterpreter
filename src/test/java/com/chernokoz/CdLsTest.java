@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class CdLsTest {
 
     private String testFunc(String str, Environment env) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        var out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
         try {
             Main.runLine(str, env);
@@ -41,8 +41,8 @@ public class CdLsTest {
         checkMultiplatform(currDir + "src/", "cd src/ | pwd", env);
         checkMultiplatform(currDir + "src/test/", "cd test/ | pwd", env);
 
-        String testDir = currDir + "src/test/resources/testLs";
-        checkMultiplatform(testDir, "cd resources/testLs | pwd", env);
+        String testDir = currDir + "src/test/resources/testLs/";
+        checkMultiplatform(testDir, "cd resources/testLs/ | pwd", env);
 
         String expected = "somefile.txt\n" +
                 "dir2\n" +
@@ -96,6 +96,12 @@ public class CdLsTest {
     }
 
     @Test
+    public void cdSeparatorError() {
+        checkMultiplatform("-bash: cd: error: write src" + File.separator + " instead\n",
+                "cd src", env);
+    }
+
+    @Test
     public void cdNotExistentDirectory() {
         checkMultiplatform("-bash: cd: kkk: Not a directory\n", "cd kkk", env);
     }
@@ -107,6 +113,8 @@ public class CdLsTest {
     }
 
     private String fixSeparators(String path) {
-        return path.replaceAll("/", Matcher.quoteReplacement(File.separator));
+        return path
+                .replaceAll("\n", System.lineSeparator())
+                .replaceAll("/", Matcher.quoteReplacement(File.separator));
     }
 }
