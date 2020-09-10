@@ -26,7 +26,7 @@ public class OutsideCommand extends Command {
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
 
-        ProcessBuilder builder = new ProcessBuilder();
+        ProcessBuilder builder = new ProcessBuilder().redirectError(ProcessBuilder.Redirect.INHERIT);
         if (isWindows) {
             builder.command("cmd.exe", "/c", commandString);
         } else {
