@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * in case the directory exists **/
 public class CommandCd extends Command {
 
-    private final String newPath;
+    private String newPath;
     private final Environment env;
 
     /** gets only first argument. Other arguments are ignored **/
@@ -26,16 +26,17 @@ public class CommandCd extends Command {
     }
 
     public void execute() {
+        if (newPath.endsWith("/")) { // handle for windows
+            newPath = newPath.substring(0, newPath.length() - 1);
+        }
+
         String currDir = handleMoveUp(env.getCurrentDirectory(), newPath);
+        if (!currDir.endsWith(File.separator) && !newPath.equals("..")) {
+            currDir += File.separator;
+        }
 
         var file = new File(currDir);
-        if (file.exists() && file.isDirectory()) {
-            if (!newPath.endsWith(File.separator) && !newPath.equals("..")) {
-                System.out.println("-bash: cd: error: write "
-                        + newPath + File.separator + " instead");
-                return;
-            }
-
+        if (file.exists() && file.isDirectory() && file.canRead()) {
             env.setCurrentDirectory(currDir);
         } else {
             System.out.println("-bash: cd: " + newPath + ": Not a directory");
@@ -43,16 +44,17 @@ public class CommandCd extends Command {
     }
 
     private String handleMoveUp(String currDir, String newPath) {
-        String res = currDir;
+        var withoutLastSep = currDir.substring(0, currDir.length() - 1);
+
+        // handle fs root case
+        if (withoutLastSep.lastIndexOf(File.separator) == -1)
+            return currDir;
 
         if (newPath.equals("..")) {
-            res = currDir.substring(0, currDir
-                    .substring(0, currDir.length() - 1)
-                    .lastIndexOf(File.separator)) + "/";
+            return currDir.substring(0,
+                    withoutLastSep.lastIndexOf(File.separator)) + File.separator;
         } else {
-            res += newPath;
+            return currDir + newPath;
         }
-
-        return res;
     }
 }

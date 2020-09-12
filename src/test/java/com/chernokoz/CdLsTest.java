@@ -86,7 +86,7 @@ public class CdLsTest {
         assertEquals(testDir + "dir1/",
                 testFunc("cd " + "src/test/resources/testLs/dir1/" + " | pwd", env));
 
-        checkMultiplatform(testDir,"cd " + ".." + " | pwd", env);
+        checkMultiplatform(testDir,"cd .. | pwd", env);
     }
 
     @Test
@@ -96,9 +96,24 @@ public class CdLsTest {
     }
 
     @Test
-    public void cdSeparatorError() {
-        checkMultiplatform("-bash: cd: error: write src" + File.separator + " instead\n",
-                "cd src", env);
+    public void cdUpFromRoot() {
+        // check doesn't throw any errors
+        checkMultiplatform("",
+                "cd .. | cd .. | cd .. | cd .. | cd .. | cd .. | cd .. | cd .. | cd ..", env);
+    }
+
+    @Test
+    public void cdNotSkipRootDirectory() {
+        var rootDir = env.getCurrentDirectory();
+        checkMultiplatform(rootDir, "cd src | cd .. | pwd", env);
+        assertEquals(rootDir, env.getCurrentDirectory());
+    }
+
+    @Test
+    public void cdNotSkipProjectDirectory() {
+        var rootDir = env.getCurrentDirectory();
+        checkMultiplatform(rootDir, "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd", env);
+        assertEquals(rootDir, env.getCurrentDirectory());
     }
 
     @Test
@@ -109,7 +124,7 @@ public class CdLsTest {
 
     private void checkMultiplatform(String expected, String command, Environment env) {
         assertEquals(fixSeparators(expected),
-                testFunc(fixSeparators(command), env));
+                fixSeparators(testFunc(fixSeparators(command), env)));
     }
 
     private String fixSeparators(String path) {

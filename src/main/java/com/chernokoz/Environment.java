@@ -29,7 +29,6 @@ public class Environment {
 
     /**
      * setter for current directory
-     * @param newDirectory
      */
     public void setCurrentDirectory(String newDirectory) {
         currentDirectory = newDirectory;
