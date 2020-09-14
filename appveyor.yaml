@@ -1,0 +1,11 @@
+# version format
+version: 1.0.{build}
+
+image: Windows Server 2019
+
+install:
+  - ps: Write-Host Server version $(gp 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').BuildLabEx
+  - docker version
+
+test_script:
+  - ./gradlew check

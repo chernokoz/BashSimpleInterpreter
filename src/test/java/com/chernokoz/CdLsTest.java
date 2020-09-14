@@ -124,7 +124,7 @@ public class CdLsTest {
 
     private void checkMultiplatform(String expected, String command, Environment env) {
         assertEquals(fixSeparators(expected),
-                fixSeparators(testFunc(fixSeparators(command), env)));
+                (testFunc(fixSeparators(command), env)));
     }
 
     private String fixSeparators(String path) {
