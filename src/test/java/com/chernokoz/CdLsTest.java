@@ -114,7 +114,7 @@ public class CdLsTest {
         var rootDir = env.getCurrentDirectory();
         checkMultiplatform(rootDir,
                 "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd", env);
-        assertEquals(rootDir, env.getCurrentDirectory());
+        assertEquals(rootDir.toLowerCase(), env.getCurrentDirectory().toLowerCase());
     }
 
     @Test
