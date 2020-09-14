@@ -16,7 +16,7 @@ public class Environment {
     /**
      * current directory value
      */
-    private final String currentDirectory = new File("").getAbsolutePath();
+    private String currentDirectory = System.getProperty("user.dir") + File.separator;
 
     /**
      * getter for currentDirectory
@@ -24,6 +24,14 @@ public class Environment {
      */
     public String getCurrentDirectory() {
         return currentDirectory;
+    }
+
+
+    /**
+     * setter for current directory
+     */
+    public void setCurrentDirectory(String newDirectory) {
+        currentDirectory = newDirectory;
     }
 
     /**
