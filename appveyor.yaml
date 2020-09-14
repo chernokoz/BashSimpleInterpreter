@@ -13,5 +13,7 @@ build: off
 build_script:
   - echo hello
 
+build_mode: Script
+
 test_script:
   - ./gradlew check
