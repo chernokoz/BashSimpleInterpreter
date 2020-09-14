@@ -83,7 +83,7 @@ public class CdLsTest {
     @Test
     public void cdUp() {
         String testDir = currDir + "src/test/resources/testLs/";
-        assertEquals(testDir + "dir1/",
+        assertEquals(testDir + "dir1" + System.lineSeparator(),
                 testFunc("cd " + "src/test/resources/testLs/dir1/" + " | pwd", env));
 
         checkMultiplatform(testDir,"cd .. | pwd", env);
@@ -111,9 +111,10 @@ public class CdLsTest {
 
     @Test
     public void cdNotSkipProjectDirectory() {
-        var rootDir = env.getCurrentDirectory();
-        checkMultiplatform(rootDir, "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd", env);
-        assertEquals(rootDir, env.getCurrentDirectory());
+        var rootDir = env.getCurrentDirectory().toLowerCase();
+        checkMultiplatform(rootDir,
+                "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd".toLowerCase(), env);
+        assertEquals(rootDir, env.getCurrentDirectory().toLowerCase());
     }
 
     @Test
