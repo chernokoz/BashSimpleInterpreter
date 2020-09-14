@@ -7,5 +7,9 @@ install:
   - ps: Write-Host Server version $(gp 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').BuildLabEx
   - docker version
 
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - echo hello
+
 test_script:
   - ./gradlew check
