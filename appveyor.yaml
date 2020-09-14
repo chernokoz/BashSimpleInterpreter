@@ -1,5 +1,5 @@
 # version format
-version: 1.0.{build}
+#version: 1.0.{build}
 
 #image: Visual Studio 2015
 
@@ -13,7 +13,7 @@ platform:
 #  - docker version
 
 #build: off
-build_mode: Script
+#build_mode: Script
 
 ## to run your custom scripts instead of automatic MSBuild
 #build_script:
