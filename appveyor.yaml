@@ -15,9 +15,9 @@ platform:
 #build: off
 #build_mode: Script
 
-## to run your custom scripts instead of automatic MSBuild
-#build_script:
-#  - echo hello
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - echo hello
 
 
 test_script:
