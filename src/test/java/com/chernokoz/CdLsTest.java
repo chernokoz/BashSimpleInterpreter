@@ -124,14 +124,13 @@ public class CdLsTest {
 
 
     private void checkMultiplatform(String expected, String command, Environment env) {
-        assertEquals(fixSeparators(expected),
-                testFunc(fixSeparators(command), env));
+        assertEquals(fixSeparators(expected).toLowerCase(),
+                testFunc(fixSeparators(command), env).toLowerCase());
     }
 
     private String fixSeparators(String path) {
         return path
                 .replaceAll("\n", System.lineSeparator())
-                .replaceAll("/", Matcher.quoteReplacement(File.separator))
-                .toLowerCase(); // case insensitivity in Windows
+                .replaceAll("/", Matcher.quoteReplacement(File.separator));
     }
 }
