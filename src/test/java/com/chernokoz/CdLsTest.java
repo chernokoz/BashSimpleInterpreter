@@ -83,8 +83,8 @@ public class CdLsTest {
     @Test
     public void cdUp() {
         String testDir = currDir + "src/test/resources/testLs/";
-        assertEquals(testDir + "dir1" + File.separator,
-                testFunc("cd " + "src/test/resources/testLs/dir1/" + " | pwd", env));
+        checkMultiplatform(testDir + "dir1" + File.separator,
+                "cd src/test/resources/testLs/dir1/" + " | pwd", env);
 
         checkMultiplatform(testDir,"cd .. | pwd", env);
     }
