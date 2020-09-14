@@ -48,10 +48,10 @@ public class CommandLs extends Command {
         if (file.isDirectory()) {
             Arrays.stream(Objects.requireNonNull(file.list()))
                     .sorted()
-                    .map(p -> res.append(p).append("\n"))
+                    .map(p -> res.append(p).append(System.lineSeparator()))
                     .collect(Collectors.toList());
         } else if (file.isFile()) {
-            res.append(directory).append("\n");
+            res.append(directory).append(System.lineSeparator());
         } else {
             System.out.println("ls: " + arg + ": No such file or directory");
         }
