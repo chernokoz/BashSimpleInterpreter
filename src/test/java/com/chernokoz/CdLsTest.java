@@ -44,19 +44,19 @@ public class CdLsTest {
         String testDir = currDir + "src/test/resources/testLs/";
         checkMultiplatform(testDir, "cd resources/testLs/ | pwd", env);
 
-        String expected = "somefile.txt\n" +
+        String expected = "dir1\n" +
                 "dir2\n" +
                 "dir3\n" +
-                "dir1\n";
+                "somefile.txt\n";
         checkMultiplatform(expected, "ls", env);
     }
 
     @Test
     public void lsWithArgument() {
-        String expected = "somefile.txt\n" +
+        String expected = "dir1\n" +
                 "dir2\n" +
                 "dir3\n" +
-                "dir1\n";
+                "somefile.txt\n";
         checkMultiplatform(expected, "ls src/test/resources/testLs/", env);
     }
 
@@ -83,8 +83,8 @@ public class CdLsTest {
     @Test
     public void cdUp() {
         String testDir = currDir + "src/test/resources/testLs/";
-        assertEquals(testDir + "dir1/",
-                testFunc("cd " + "src/test/resources/testLs/dir1/" + " | pwd", env));
+        checkMultiplatform(testDir + "dir1" + File.separator,
+                "cd src/test/resources/testLs/dir1/" + " | pwd", env);
 
         checkMultiplatform(testDir,"cd .. | pwd", env);
     }
@@ -112,8 +112,9 @@ public class CdLsTest {
     @Test
     public void cdNotSkipProjectDirectory() {
         var rootDir = env.getCurrentDirectory();
-        checkMultiplatform(rootDir, "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd", env);
-        assertEquals(rootDir, env.getCurrentDirectory());
+        checkMultiplatform(rootDir,
+                "cd src | cd .. | cd .. | cd bashSimpleInterpreter | pwd", env);
+        assertEquals(rootDir.toLowerCase(), env.getCurrentDirectory().toLowerCase());
     }
 
     @Test
@@ -123,8 +124,8 @@ public class CdLsTest {
 
 
     private void checkMultiplatform(String expected, String command, Environment env) {
-        assertEquals(fixSeparators(expected),
-                (testFunc(fixSeparators(command), env)));
+        assertEquals(fixSeparators(expected).toLowerCase(),
+                testFunc(fixSeparators(command), env).toLowerCase());
     }
 
     private String fixSeparators(String path) {
