@@ -47,6 +47,7 @@ public class CommandLs extends Command {
 
         if (file.isDirectory()) {
             Arrays.stream(Objects.requireNonNull(file.list()))
+                    .sorted()
                     .map(p -> res.append(p).append("\n"))
                     .collect(Collectors.toList());
         } else if (file.isFile()) {
