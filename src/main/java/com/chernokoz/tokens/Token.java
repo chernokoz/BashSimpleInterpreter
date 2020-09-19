@@ -16,7 +16,7 @@ public interface Token {
     /**
      * reserved words list
      */
-    List<String> reservedWords = Arrays.asList("cat", "echo", "wc", "pwd", "exit", "grep");
+    List<String> reservedWords = Arrays.asList("cat", "echo", "wc", "pwd", "exit", "grep", "ls", "cd");
 
     /**
      * special symbols list
