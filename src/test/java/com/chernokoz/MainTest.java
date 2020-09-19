@@ -3,6 +3,11 @@ package com.chernokoz;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +18,17 @@ public class MainTest {
         System.setOut(new PrintStream(out));
         try {
             Main.runLine(str, new Environment());
+        } catch (Exception e) {
+            return out.toString();
+        }
+        return out.toString();
+    }
+
+    private String testFunc(String str, Environment env) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        try {
+            Main.runLine(str, env);
         } catch (Exception e) {
             return out.toString();
         }
@@ -188,5 +204,86 @@ public class MainTest {
                 "abc def",
                 testFunc(String.format("echo \"abc def%sabcdef\" | grep -w \"def\"", sep))
         );
+    }
+
+    @Test
+    public void lsSimpleTest() throws IOException {
+        Path tmpDir = Files.createTempDirectory("tmpDir");
+        File file1 = File.createTempFile("tmp1", ".txt", tmpDir.toFile());
+        File file2 = File.createTempFile("tmp2", ".txt", tmpDir.toFile());
+        File file3 = File.createTempFile("tmp3", ".txt", tmpDir.toFile());
+        File file4 = File.createTempFile("tmp4", ".txt", tmpDir.toFile());
+        Path inDir = Files.createTempDirectory(tmpDir, "internalDirectory");
+
+        List<String> expectedFiles = new ArrayList<>();
+        expectedFiles.add(file1.getName());
+        expectedFiles.add(file2.getName());
+        expectedFiles.add(file3.getName());
+        expectedFiles.add(file4.getName());
+        expectedFiles.add(inDir.getFileName().getFileName().toString());
+
+        List<String> actualFiles = Arrays.asList(testFunc("ls " + tmpDir.toString()).split("\n"));
+
+        assertTrue(checkContains(expectedFiles, actualFiles));
+
+    }
+
+    @Test
+    public void lsTestWrongNumArgs() throws IOException {
+        Path tmpDir1 = Files.createTempDirectory("tmpDir1");
+        Path tmpDir2 = Files.createTempDirectory("tmpDir2");
+
+        String expected = "Wrong number of arguments\n";
+        String out = testFunc("ls " + tmpDir1.toString() + " " + tmpDir2.toString());
+
+        assertEquals(expected, out);
+    }
+
+    @Test
+    public void lsTestNoSuchFileDir() throws IOException {
+        String expected = "No such file or directory\n";
+        String out = testFunc("ls nonexistentDirectory");
+
+        assertEquals(expected, out);
+    }
+
+    @Test
+    public void cdSimpleTest() throws IOException {
+        Environment env = new Environment();
+        Path tmpDir = Files.createTempDirectory("tmpDir");
+        testFunc("cd " + tmpDir.toString(), env);
+
+        assertEquals(tmpDir.toString(), env.getCurrentDirectory());
+    }
+
+    @Test
+    public void cdTestWrongNumArgs() throws IOException {
+        Path tmpDir1 = Files.createTempDirectory("tmpDir1");
+        Path tmpDir2 = Files.createTempDirectory("tmpDir2");
+        String out = testFunc("cd " + tmpDir1.toString() + " " + tmpDir2.toString());
+        String expected = "Wrong number of arguments\n";
+
+        assertEquals(expected, out);
+    }
+
+    @Test
+    public void cdTestDirNotExist() {
+        String out = testFunc("cd nonexistentDirectory");
+        String expected = "This directory does not exist\n";
+
+        assertEquals(expected, out);
+    }
+
+    private boolean checkContains(List<String> expectedFiles, List<String> actualFiles) {
+        if (expectedFiles.size() != actualFiles.size()) {
+            return false;
+        }
+
+        for (String file: expectedFiles) {
+            if (!actualFiles.contains(file)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
