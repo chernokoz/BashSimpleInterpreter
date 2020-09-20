@@ -2,6 +2,7 @@ package com.chernokoz;
 
 import com.chernokoz.commands.Command;
 import com.chernokoz.exceptions.ExitException;
+import com.chernokoz.exceptions.PatternNotFoundException;
 import com.chernokoz.exceptions.StopException;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         var env = new Environment();
         System.out.println(env.getCurrentDirectory());
@@ -44,7 +45,8 @@ public class Main {
     /**
      * function with logic for run one line
      */
-    protected static boolean runLine(String str, Environment env) throws ExitException, IOException {
+    protected static boolean runLine(String str, Environment env) throws ExitException,
+            IOException, PatternNotFoundException {
         var lexer = new Lexer(str);
 
         boolean result = false;
